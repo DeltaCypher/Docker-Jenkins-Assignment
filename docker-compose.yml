@@ -78,7 +78,7 @@ services:
       PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: rootpassword   # must match mysql service above
     ports:
-      - "8080:80"              # access phpMyAdmin at http://<VM-IP>:8080
+      - "8081:80"              # access phpMyAdmin at http://<VM-IP>:8080
     depends_on:
       - mysql
     networks:
