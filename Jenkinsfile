@@ -65,7 +65,7 @@ pipeline {
             steps {
                 echo '🐳 Pulling latest images from Docker Hub...'
                 sh '''
-                    docker-compose -f ${COMPOSE_FILE} pull
+                    docker compose -f ${COMPOSE_FILE} pull
                     echo "✅ All images pulled successfully"
                 '''
             }
@@ -77,7 +77,7 @@ pipeline {
                 echo '🛑 Stopping any running containers...'
                 sh '''
                     # --remove-orphans cleans up containers not in compose file
-                    docker-compose -p ${APP_NAME} -f ${COMPOSE_FILE} down --remove-orphans || true
+                    docker compose -p ${APP_NAME} -f ${COMPOSE_FILE} down --remove-orphans || true
                     echo "✅ Old containers stopped"
                 '''
             }
@@ -90,7 +90,7 @@ pipeline {
                 sh '''
                     # --build  : rebuilds images if Dockerfile changed
                     # -d       : detached mode (runs in background)
-                    docker-compose -p ${APP_NAME} -f ${COMPOSE_FILE} up --build -d
+                    docker compose -p ${APP_NAME} -f ${COMPOSE_FILE} up --build -d
                     echo "✅ All containers started"
                 '''
             }
@@ -105,7 +105,7 @@ pipeline {
                     sleep 15
 
                     echo "--- Running Containers ---"
-                    docker-compose -p ${APP_NAME} -f ${COMPOSE_FILE} ps
+                    docker compose -p ${APP_NAME} -f ${COMPOSE_FILE} ps
 
                     # Check nginx is responding on port 80
                     if curl -sf http://localhost:80 > /dev/null; then
@@ -131,7 +131,7 @@ pipeline {
             steps {
                 echo '📋 Recent container logs...'
                 sh '''
-                    docker-compose -p ${APP_NAME} -f ${COMPOSE_FILE} logs --tail=20
+                    docker compose -p ${APP_NAME} -f ${COMPOSE_FILE} logs --tail=20
                 '''
             }
         }
@@ -159,7 +159,7 @@ pipeline {
             echo '❌ DEPLOYMENT FAILED! Check logs above.'
             // Roll back: bring up last known containers
             sh '''
-                docker-compose -p ${APP_NAME} -f ${COMPOSE_FILE} down || true
+                docker compose -p ${APP_NAME} -f ${COMPOSE_FILE} down || true
             '''
             // Uncomment to send email on failure:
             // mail to: 'team@yourcompany.com',
