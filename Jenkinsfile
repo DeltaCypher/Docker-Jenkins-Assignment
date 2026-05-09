@@ -54,7 +54,7 @@ pipeline {
             steps {
                 echo '🔍 Validating docker-compose.yml syntax...'
                 sh '''
-                    docker-compose -f ${COMPOSE_FILE} config
+                    docker compose -f ${COMPOSE_FILE} config
                     echo "✅ docker-compose.yml is valid"
                 '''
             }
