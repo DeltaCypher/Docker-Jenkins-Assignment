@@ -1,11 +1,10 @@
 #!/bin/bash
 
-ACCESS_LOG="/var/log/nginx/access.log"
-ERROR_LOG="/var/log/nginx/error.log"
+# Log file path
+LOG_FILE="/var/log/nginx/access.log"
 
-echo "Unique IP Addresses from Access and Error Logs"
-echo "------------------------------------------------"
+echo "Unique IP Addresses:"
+echo "---------------------"
 
-cat $ACCESS_LOG $ERROR_LOG 2>/dev/null | \
-grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' | \
-sort | uniq
+# Extract unique IP addresses
+awk '{print $1}' $LOG_FILE | sort | uniq

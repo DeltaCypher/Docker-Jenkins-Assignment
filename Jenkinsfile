@@ -126,33 +126,19 @@ pipeline {
             }
         }
 	
-	// ── STAGE 8: Extract Unique IPs ──────────────────────────
+	// ── STAGE 7: Extract Unique IPs ──────────────────────────
         stage('Extract IP Addresses') {
             steps {
-                /* echo '🔍 Extracting IPs from Nginx logs...'
-                sh '''
-                    # Generate test traffic
-                    for i in 1 2 3 4 5; do curl -s http://localhost:80 > /dev/null; done
-                    sleep 3
- 
-                    # Copy log out of container
-                    docker cp nginx_server:/var/log/nginx/access.log /tmp/nginx_access.log
- 
-                    if [ -s /tmp/nginx_access.log ]; then
-                        bash scripts/extract_ips.sh /tmp/nginx_access.log
-                        mkdir -p reports
-                        mv unique_ips_*.txt reports/ 2>/dev/null || true
-                        echo "✅ IP report saved"
-                    else
-                        echo "⚠️ Log empty — skipping"
-                    fi
-                ''' */
+                 echo '🔍 Extracting IPs from Nginx logs...'
 
-		sh ''' bash scripts/extract_ips_1.sh '''
+		sh ''' bash -x scripts/extract_ips_1.sh '''
             }
         }
-	/*
-	// ── STAGE 9: MySQL Backup to S3 ──────────────────────────
+	
+
+	/*	
+
+	// ── STAGE 8: MySQL Backup to S3 ──────────────────────────
         //
         //  Credentials are injected by Jenkins at runtime using
         //  withCredentials block. They are:
@@ -201,7 +187,7 @@ pipeline {
             }
         } */
 
-        // ── STAGE 10: Show container logs (for debugging) ─────────
+        // ── STAGE 9: Show container logs (for debugging) ─────────
         stage('Show Logs') {
             steps {
                 echo '📋 Recent container logs...'
