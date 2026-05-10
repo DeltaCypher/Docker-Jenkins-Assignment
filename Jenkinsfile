@@ -101,8 +101,8 @@ pipeline {
             steps {
                 echo '🏥 Waiting for services to become healthy...'
                 sh '''
-                    # Give containers 15 seconds to fully start
-                    sleep 15
+                    # Give containers 20 seconds to fully start
+                    sleep 20
 
                     echo "--- Running Containers ---"
                     docker compose -p ${APP_NAME} -f ${COMPOSE_FILE} ps
@@ -115,9 +115,9 @@ pipeline {
                         exit 1
                     fi
 
-                    # Check phpMyAdmin is responding on port 8080
-                    if curl -sf http://localhost:8080 > /dev/null; then
-                        echo "✅ phpMyAdmin is UP on port 8080"
+                    # Check phpMyAdmin is responding on port 8081
+                    if curl -sf http://localhost:8081 > /dev/null; then
+                        echo "✅ phpMyAdmin is UP on port 8081"
                     else
                         echo "❌ phpMyAdmin health check FAILED"
                         exit 1
@@ -146,7 +146,7 @@ pipeline {
             ║  ✅ DEPLOYMENT SUCCESSFUL!        ║
             ║                                  ║
             ║  Nginx    → http://localhost      ║
-            ║  phpMyAdmin → http://localhost:8080║
+            ║  phpMyAdmin → http://localhost:8081║
             ╚══════════════════════════════════╝
             '''
             // Uncomment to send email on success:
