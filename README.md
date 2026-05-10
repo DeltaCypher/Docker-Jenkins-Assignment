@@ -108,7 +108,7 @@ Open a browser and visit:
 | Service     | URL                          |
 |-------------|------------------------------|
 | Nginx + PHP | http://<YOUR-VM-IP>:80       |
-| phpMyAdmin  | http://<YOUR-VM-IP>:8080     |
+| phpMyAdmin  | http://<YOUR-VM-IP>:8081     |
 
 > 💡 Find your VM IP with: `ip addr show | grep inet`
 
@@ -138,7 +138,7 @@ docker compose down -v            # stop + remove containers AND volumes (wipes 
 sudo apt install -y openjdk-17-jdk
 
 # Add Jenkins repository
-curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key \
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key \
   | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
 
 echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
