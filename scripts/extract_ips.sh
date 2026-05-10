@@ -1,26 +1,29 @@
 #!/bin/bash
-# extract_ips.sh - Fast IP extraction directly from nginx container
+# extract_ips.sh
+# Extracts unique IPs using only awk (fastest method - single pass)
 
 echo "========================================="
 echo "       Nginx Log - Unique IP Report      "
 echo "========================================="
 
-# Read log directly from container using docker exec
-# No file copying needed - much faster!
-LOG=$(docker exec nginx_server cat /var/log/nginx/access.log 2>/dev/null)
+# Single awk command does everything in ONE pass:
+# - reads log directly from container
+# - counts each IP
+# - prints result
+# No sort, no uniq, no temp files = very fast
+docker exec nginx_server awk '
+{
+    count[$1]++       # count each IP (column 1)
+}
+END {
+    print "COUNT      IP ADDRESS"
+    print "---------  ---------------"
+    for (ip in count) {
+        printf "%-10s %s\n", count[ip], ip
+    }
+    print "---------  ---------------"
+    print "Unique IPs: " length(count)
+}
+' /var/log/nginx/access.log
 
-if [ -z "$LOG" ]; then
-    echo "Log is empty or nginx container is not running."
-    exit 1
-fi
-
-echo "Total Requests : $(echo "$LOG" | wc -l)"
-echo ""
-echo "COUNT      IP ADDRESS"
-echo "---------  ---------------"
-echo "$LOG" | awk '{print $1}' | sort | uniq -c | sort -rn | \
-    awk '{printf "%-10s %s\n", $1, $2}'
-
-echo ""
-echo "Unique IPs : $(echo "$LOG" | awk '{print $1}' | sort -u | wc -l)"
 echo "========================================="
