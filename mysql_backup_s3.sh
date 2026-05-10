@@ -33,23 +33,18 @@ set -euo pipefail
 DB_HOST="127.0.0.1"          # use 127.0.0.1 (not 'localhost') with TCP
 DB_PORT="3306"
 DB_USER="root"
-#DB_PASSWORD="rootpassword"    # ← your MySQL root password
-#DB_NAME="myapp_db"            # ← database to back up ("--all-databases" for all)
-DB_PASSWORD="${DB_PASSWORD:-rootpassword}"
-DB_NAME="${DB_NAME:-myapp_db}"
-	
+DB_PASSWORD="rootpassword"    # ← your MySQL root password
+DB_NAME="myapp_db"            # ← database to back up ("--all-databases" for all)
 
 # Local backup folder on the VM
 BACKUP_DIR="/opt/backups/mysql"
 RETAIN_DAYS=7                 # delete local backups older than this many days
 
 # Amazon S3 settings
-#S3_BUCKET="s3://your-bucket-name"          # ← your S3 bucket
-S3_BUCKET="s3://${S3_BUCKET:-your-bucket-name}"
+S3_BUCKET="s3://your-bucket-name"          # ← your S3 bucket
 S3_FOLDER="mysql-backups"                  # folder inside the bucket
-#AWS_REGION="ap-south-1"                    # ← your AWS region (Mumbai = ap-south-1)
-AWS_REGION="${AWS_REGION:-ap-south-1}"
-	
+AWS_REGION="ap-south-1"                    # ← your AWS region (Mumbai = ap-south-1)
+
 # Notification (optional) – set to empty string "" to disable
 ALERT_EMAIL=""                # e.g. "admin@yourcompany.com"
 

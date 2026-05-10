@@ -125,77 +125,11 @@ pipeline {
                 '''
             }
         }
-	
-	// ── STAGE 7: Extract Unique IPs ──────────────────────────
-        // This stage:
-        //  1. Sends 5 requests to nginx so the log has entries
-        //  2. Runs extract_ips.sh which copies log from container
-        //     and prints a unique IP table in the console
-        // ─────────────────────────────────────────────────────────
-        stage('Extract IP Addresses') {
-            steps {
-                echo '🔍 Extracting IPs from Nginx log...'
-                sh '''
-                    # Run the script
-                    bash scripts/extract_ips.sh
-                '''
-            }
-        }
+        
 
-
-
-	/*	
-	// ── STAGE 8: MySQL Backup to S3 ──────────────────────────
-        //
-        //  Credentials are injected by Jenkins at runtime using
-        //  withCredentials block. They are:
-        //    • never written to disk
-        //    • masked as **** in all console logs
-        //    • not visible in the Jenkinsfile at all
-        // ─────────────────────────────────────────────────────────
-        stage('MySQL Backup to S3') {
-            steps {
-                echo '💾 Running MySQL backup...'
- 
-                // Pull all secrets from Jenkins Credentials Store here
-                withCredentials([
-                    string(credentialsId: 'db_name',              variable: 'DB_NAME'),
-                    string(credentialsId: 'db_password',          variable: 'DB_PASSWORD'),
-                    string(credentialsId: 's3_bucket',            variable: 'S3_BUCKET'),
-                    string(credentialsId: 'aws_region',           variable: 'AWS_REGION'),
-                    string(credentialsId: 'aws_access_key_id',    variable: 'AWS_ACCESS_KEY_ID'),
-                    string(credentialsId: 'aws_secret_access_key',variable: 'AWS_SECRET_ACCESS_KEY')
-                ]) {
-                    sh '''
-                        # Wait for MySQL to be ready
-                        echo "⏳ Waiting for MySQL..."
-                        RETRIES=10
-                        COUNT=0
-                        until docker exec mysql_db mysqladmin ping \
-                              -h 127.0.0.1 -u root -p${DB_PASSWORD} --silent 2>/dev/null; do
-                            COUNT=$((COUNT+1))
-                            [ $COUNT -ge $RETRIES ] && echo "❌ MySQL timeout" && exit 1
-                            echo "Retry $COUNT/$RETRIES..."
-                            sleep 5
-                        done
-                        echo "✅ MySQL ready"
- 
-                        # Export AWS credentials as environment variables
-                        # so aws CLI picks them up automatically
-                        export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"
-                        export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"
-                        export AWS_DEFAULT_REGION="${AWS_REGION}"
- 
-                        # Run backup script — credentials passed via env vars
-                        # No passwords appear in this file or in console logs
-                        bash scripts/mysql_backup_s3.sh ${DB_NAME}
-                    '''
-                }
-            }
-        } */
-
-        // ── STAGE 9: Show container logs (for debugging) ─────────
-        stage('Show Logs') {
+	// ── STAGE 7: Show container logs (for debugging) ─────────
+        
+	stage('Show Logs') {
             steps {
                 echo '📋 Recent container logs...'
                 sh '''
