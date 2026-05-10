@@ -127,17 +127,29 @@ pipeline {
         }
 	
 	// ── STAGE 7: Extract Unique IPs ──────────────────────────
+        // This stage:
+        //  1. Sends 5 requests to nginx so the log has entries
+        //  2. Runs extract_ips.sh which copies log from container
+        //     and prints a unique IP table in the console
+        // ─────────────────────────────────────────────────────────
         stage('Extract IP Addresses') {
             steps {
-                 echo '🔍 Extracting IPs from Nginx logs...'
-
-		sh ''' bash -x scripts/extract_ips_1.sh '''
+                echo '🔍 Extracting IPs from Nginx log...'
+                sh '''
+                    # Generate some traffic so log is not empty
+                    for i in 1 2 3 4 5; do
+                        curl -s http://localhost:80 > /dev/null
+                    done
+ 
+                    # Run the script
+                    bash scripts/extract_ips.sh
+                '''
             }
         }
-	
+
+
 
 	/*	
-
 	// ── STAGE 8: MySQL Backup to S3 ──────────────────────────
         //
         //  Credentials are injected by Jenkins at runtime using
