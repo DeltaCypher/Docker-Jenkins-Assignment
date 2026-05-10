@@ -108,7 +108,7 @@ pipeline {
                     docker compose -p ${APP_NAME} -f ${COMPOSE_FILE} ps
 
                     # Check nginx is responding on port 80
-                    if curl -sf http://localhost:80 > /dev/null; then
+                    if curl -I http://localhost:80 > /dev/null; then
                         echo "✅ Nginx is UP on port 80"
                     else
                         echo "❌ Nginx health check FAILED"
@@ -116,7 +116,7 @@ pipeline {
                     fi
 
                     # Check phpMyAdmin is responding on port 8081
-                    if curl -sf http://localhost:8081 > /dev/null; then
+                    if curl -I http://localhost:8081 > /dev/null; then
                         echo "✅ phpMyAdmin is UP on port 8081"
                     else
                         echo "❌ phpMyAdmin health check FAILED"
