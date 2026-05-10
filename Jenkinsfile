@@ -129,7 +129,7 @@ pipeline {
 	// ── STAGE 8: Extract Unique IPs ──────────────────────────
         stage('Extract IP Addresses') {
             steps {
-                echo '🔍 Extracting IPs from Nginx logs...'
+                /* echo '🔍 Extracting IPs from Nginx logs...'
                 sh '''
                     # Generate test traffic
                     for i in 1 2 3 4 5; do curl -s http://localhost:80 > /dev/null; done
@@ -146,7 +146,9 @@ pipeline {
                     else
                         echo "⚠️ Log empty — skipping"
                     fi
-                '''
+                ''' */
+
+		sh ''' bash scripts/extract_ips_1.sh '''
             }
         }
 	/*
